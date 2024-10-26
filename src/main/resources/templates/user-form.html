@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create User</title>
+</head>
+<body>
+<h1>신규회원</h1>
+<form th:action="@{/users/new}" th:object="${users}" method="post">
+    <label for="name">이름 : </label>
+    <input type="text" id="name" th:field="*{name}" /><br/>
+    <button type="submit">Save</button>
+</form>
+<button type="button" onclick="location.href='../usr/home/main'">목록</button>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User List</title>
+    <style>
+        .status-cell {
+            text-align: center;
+            cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+            padding: 5px 10px 5px 10px;
+            border: 1px solid;
+            border-radius: 10px; /* 모서리 둥글게 */
+            transition: background-color 0.3s, box-shadow 0.3s; /* 효과를 부드럽게 하기 위한 전환 설정 */
+        }
+
+        .status-cell:hover {
+            background-color: #f0f0f0; /* 마우스를 올렸을 때 배경색 변경 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 입체 효과 */
+        }
+    </style>
+    <script>
+        function toggleStatus(userId, field) {
+            fetch(`/users/toggle?userId=${userId}&field=${field}`, {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 상태에 따라 업데이트된 데이터 처리
+                    if (field === 'isMoney') {
+                        document.getElementById(`money-${userId}`).innerText = data.isMoney ? 'O' : 'X';
+                    } else if (field === 'isParticipation') {
+                        document.getElementById(`participation-${userId}`).innerText = data.isParticipation ? 'O' : 'X';
+                    }
+                })
+                .catch(error => console.error('There was a problem with the fetch operation:', error));
+        }
+
+        function goToCurrentMonth() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1; // getMonth()는 0부터 시작하므로 +1
+            location.href = `/usr/month/${year}/${month}`; // URL 수정
+        }
+    </script>
+</head>
+<body>
+<button type="button" onclick="location.href='../users/new'">회원 추가</button>
+<button type="button" onclick="location.href='../h2-console/login.do?jsessionid=0eee04fa5edc9d6bd800c138a755474b'">DB</button>
+
+<!-- 현재 연도와 월로 이동하는 버튼 -->
+<button type="button" onclick="goToCurrentMonth()">이번 달 사용자 목록</button> <!-- 추가된 버튼 -->
+
+<table>
+    <tr>
+        <th style="text-align: center">번호</th>
+        <th style="text-align: center">이름</th>
+    </tr>
+    <tr th:each="user : ${userss}">
+        <td style="text-align: center" th:text="${user.id}"></td>
+        <td style="text-align: center" th:text="${user.name}"></td>
+    </tr>
+</table>
+</body>
+</html>
