@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User List by Month</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    function updateActionUrl() {
+        const year = document.getElementById('yearInput').value;
+        const month = document.getElementById('monthInput').value;
+        const form = document.getElementById('filterForm');
+        form.action = `/usr/Cdar/${year}/${month}`;
+    }
+</script>
+<h1 th:text="${year}+'년 '+${month} + '월'">특정 연도와 월 사용자 목록</h1>
+
+<!-- 연도와 월 선택 폼 -->
+<form id="filterForm" method="get" onsubmit="updateActionUrl()">
+    <label>연도:</label>
+    <input type="number" id="yearInput" min="0" max="9999" required th:value="${year}">
+    <label>월:</label>
+    <input type="number" id="monthInput" min="1" max="12" required th:value="${month}">
+    <button type="submit">필터링</button>
+</form>
+
+<table>
+    <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>공금</th>
+        <th>참여</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(players)}">
+        <td colspan="4">해당 월에 사용자가 없습니다.</td>
+    </tr>
+    <tr th:each="player : ${players}"> <!-- user를 player로 변경 -->
+        <td th:text="${player.id}"></td> <!-- user를 player로 변경 -->
+        <td th:text="${player.name}"></td> <!-- user를 player로 변경 -->
+        <td th:text="${player.money ? 'O' : 'X'}"></td> <!-- user를 player로 변경 -->
+        <td th:text="${player.participation ? 'O' : 'X'}"></td> <!-- user를 player로 변경 -->
+    </tr>
+</table>
+
+<button type="button" onclick="location.href='/usr/home/main'">메인으로 돌아가기</button>
+</body>
+</html>

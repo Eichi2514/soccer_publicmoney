@@ -5,7 +5,7 @@
 </head>
 <body>
 <h1>신규회원</h1>
-<form th:action="@{/users/new}" th:object="${users}" method="post">
+<form th:action="@{/usr/new}" th:object="${player}" method="post"> <!-- 변경 -->
     <label for="name">이름 : </label>
     <input type="text" id="name" th:field="*{name}" /><br/>
     <button type="submit">Save</button>
